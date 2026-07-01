@@ -745,6 +745,22 @@ function loadKnowledgeFromServer() {
     }).catch(function(){});
   }
 }
+function exportKnowledge() {
+  var a = document.createElement('a');
+  a.href = 'data:text/json,' + encodeURIComponent(localStorage.getItem('meitu_tool_knowledge_v2'));
+  a.download = 'knowledge.json';
+  a.click();
+}
+function loadKnowledgeFromServer() {
+  var k = localStorage.getItem('meitu_tool_knowledge_v2');
+  if (!k || JSON.parse(k).length === 0) {
+    fetch('knowledge.json').then(r=>r.text()).then(d=>{
+      localStorage.setItem('meitu_tool_knowledge_v2', d);
+      knowledgeBase = JSON.parse(d);
+      updateKnowledgeUI();
+    }).catch(function(){});
+  }
+}
 </script>
 </body>
 </html>
