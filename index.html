@@ -336,7 +336,14 @@ textarea { min-height:300px; line-height:1.7; }
         <input type="text" id="modelName" placeholder="deepseek-chat" value="deepseek-chat">
         <span class="setting-hint">推荐使用 deepseek-chat</span>
       </div>
-      <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
+     <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
+     <button class="btn btn-secondary" onclick="exportKnowledge()" style="margin-top:8px;">📥 导出知识库</button>
+function exportKnowledge() {
+  var a = document.createElement('a');
+  a.href = 'data:text/json,' + encodeURIComponent(localStorage.getItem('meitu_tool_knowledge_v2'));
+  a.download = 'knowledge.json';
+  a.click();
+}
     </div>
   </div>
   <div class="card">
@@ -459,6 +466,7 @@ function enterAdminMode() {
   document.getElementById('adminLink').style.display = 'none';
   document.getElementById('exitAdminLink').style.display = 'block';
   document.getElementById('adminTabs').classList.add('show');
+  loadKnowledgeFromServer();
   loadConfig();
 }
 function exitAdminMode() {
@@ -726,6 +734,16 @@ function parseSections(text) {
   }
   if (currentSection && currentContent.length) sections[currentSection] = currentContent.join('\n').trim();
   return sections;
+}
+function loadKnowledgeFromServer() {
+  var k = localStorage.getItem('meitu_tool_knowledge_v2');
+  if (!k || JSON.parse(k).length === 0) {
+    fetch('knowledge.json').then(r=>r.text()).then(d=>{
+      localStorage.setItem('meitu_tool_knowledge_v2', d);
+      knowledgeBase = JSON.parse(d);
+      updateKnowledgeUI();
+    }).catch(function(){});
+  }
 }
 </script>
 </body>
