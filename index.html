@@ -145,17 +145,6 @@ textarea { min-height:300px; line-height:1.7; }
   line-height:1.8; font-size:14px; display:none;
 }
 .output-area.show { display:block; }
-.output-area .section-heading {
-  font-size: 20px;
-  font-weight: 700;
-  display: block;
-  margin-top: 16px;
-  margin-bottom: 6px;
-  color: #1A1A1A;
-}
-.output-area .section-heading:first-child {
-  margin-top: 0;
-}
 .output-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
 .loading-overlay {
   display:none; position:fixed; inset:0;
@@ -190,7 +179,7 @@ textarea { min-height:300px; line-height:1.7; }
   background:var(--card); border:1px solid var(--border);
   border-radius:var(--radius-sm); padding:14px 20px;
   box-shadow:0 4px 20px rgba(0,0,0,0.08);
-  z-index:9999; display:none; max-width:400px;
+  z-index:9999; display:none; max-width:360px;
   font-size:14px; line-height:1.5; animation:slideIn 0.3s ease;
 }
 @keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
@@ -269,10 +258,10 @@ textarea { min-height:300px; line-height:1.7; }
 </header>
 <div class="container">
 <div class="tabs" id="mainTabs">
-  <button class="tab-btn active" data-tab="input">📑 输入需求</button>
+  <button class="tab-btn active" data-tab="input">📝 输入需求</button>
 </div>
 <div class="tabs admin-tabs" id="adminTabs">
-  <button class="tab-btn" data-tab="knowledge">📎 知识库</button>
+  <button class="tab-btn" data-tab="knowledge">📚 知识库</button>
   <button class="tab-btn" data-tab="settings">⚙️ 设置</button>
 </div>
 <div class="tab-content active" id="tab-input">
@@ -292,12 +281,12 @@ textarea { min-height:300px; line-height:1.7; }
     </div>
   </div>
   <div id="knowledgeStatusCard" class="card" style="display:none;">
-    <div class="card-title"><span class="icon">📎</span>知识库状态</div>
+    <div class="card-title"><span class="icon">📚</span>知识库状态</div>
     <div id="knowledgeStatusContent" style="font-size:14px;color:var(--text-secondary);line-height:1.6;"></div>
   </div>
   <button class="btn btn-primary btn-lg" id="generateBtn" style="width:100%;justify-content:center;" onclick="generateStrategy()">✨ 生成传播策略</button>
   <div class="card" style="margin-top:20px;">
-    <div class="card-title"><span class="icon">📫</span>生成的策略</div>
+    <div class="card-title"><span class="icon">📄</span>生成的策略</div>
     <div class="output-area" id="outputArea"></div>
     <div class="output-actions" id="outputActions" style="display:none;">
       <button class="btn btn-primary btn-sm" onclick="copyOutput()">📋 复制文本</button>
@@ -308,7 +297,7 @@ textarea { min-height:300px; line-height:1.7; }
 </div>
 <div class="tab-content" id="tab-knowledge">
   <div class="card">
-    <div class="card-title"><span class="icon">📄</span>上传知识库文档</div>
+    <div class="card-title"><span class="icon">📤</span>上传知识库文档</div>
     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;line-height:1.6;">上传美图平台介绍、营销产品资料、过往合作案例等 PDF 文档。浏览器将自动解析文字内容，数据保存在本地。</p>
     <div class="drop-zone" id="pdfDropZone">
       <div class="drop-zone-icon">📄</div>
@@ -346,11 +335,6 @@ textarea { min-height:300px; line-height:1.7; }
         <label class="setting-label">模型名称</label>
         <input type="text" id="modelName" placeholder="deepseek-chat" value="deepseek-chat">
         <span class="setting-hint">推荐使用 deepseek-chat</span>
-      </div>
-      <div class="setting-row">
-        <label class="setting-label">CORS 代理地址</label>
-        <input type="text" id="corsProxy" placeholder="https://corsproxy.io/?" value="https://corsproxy.io/?">
-        <span class="setting-hint">留空则不使用代理。如遇跨域问题，保留默认地址即可</span>
       </div>
       <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
     </div>
@@ -406,16 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPasswordStrength();
   document.getElementById('passwordInput').addEventListener('keydown', e => { if (e.key === 'Enter') handlePassword(); });
   document.getElementById('newPassword').addEventListener('input', updatePasswordStrength);
-  checkCorsOrigin();
 });
-
-function checkCorsOrigin() {
-  if (window.location.protocol === 'file:') {
-    setTimeout(() => {
-      showToast('info', '检测到 file:// 模式，设置中已预填 CORS 代理地址，可直接使用');
-    }, 1500);
-  }
-}
 
 function initTabs() {
   document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -432,7 +407,7 @@ function showToast(type, msg) {
   t.className = 'toast toast-' + type + ' show';
   t.textContent = msg;
   clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 5000);
+  t._timer = setTimeout(() => t.classList.remove('show'), 4000);
 }
 function initPasswordStrength() {
   updatePasswordStrength();
@@ -525,9 +500,9 @@ function initPDFUpload() {
 }
 async function handlePDFFiles(files) {
   for (const file of files) {
-    if (!file.name.toLowerCase().endsWith('.pdf')) { showToast('error', '"' + file.name + '" 不是 PDF 文件'); continue; }
-    if (file.size > 50 * 1024 * 1024) { showToast('error', '"' + file.name + '" 超过 50MB 限制'); continue; }
-    if (knowledgeBase.some(k => k.name === file.name)) { showToast('info', '"' + file.name + '" 已存在，跳过'); continue; }
+    if (!file.name.toLowerCase().endsWith('.pdf')) { showToast('error', `"${file.name}" 不是 PDF 文件`); continue; }
+    if (file.size > 50 * 1024 * 1024) { showToast('error', `"${file.name}" 超过 50MB 限制`); continue; }
+    if (knowledgeBase.some(k => k.name === file.name)) { showToast('info', `"${file.name}" 已存在，跳过`); continue; }
     await processPDF(file);
   }
 }
@@ -551,45 +526,31 @@ async function processPDF(file) {
     entry.date = new Date().toLocaleString('zh-CN');
     saveKnowledge();
     updateKnowledgeUI();
-    showToast('success', '"' + file.name + '" 解析完成（' + pdf.numPages + ' 页）');
+    showToast('success', `"${file.name}" 解析完成（${pdf.numPages} 页）`);
   } catch (err) {
     entry.status = 'error';
     updateKnowledgeUI();
-    showToast('error', '"' + file.name + '" 解析失败: ' + err.message);
+    showToast('error', `"${file.name}" 解析失败: ${err.message}`);
   }
 }
 function loadKnowledge() { try { const s = localStorage.getItem(STORAGE_KEY); if (s) knowledgeBase = JSON.parse(s); } catch(e){} }
 function saveKnowledge() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(knowledgeBase)); } catch(e){} }
-
 function loadConfig() {
   try {
     const s = localStorage.getItem(CONFIG_KEY);
-    if (s) {
-      const c = JSON.parse(s);
-      document.getElementById('apiKey').value = c.apiKey || '';
-      document.getElementById('apiUrl').value = c.apiUrl || 'https://api.deepseek.com/v1';
-      document.getElementById('modelName').value = c.modelName || 'deepseek-chat';
-      document.getElementById('corsProxy').value = c.corsProxy || 'https://corsproxy.io/?';
-    }
+    if (s) { const c = JSON.parse(s); document.getElementById('apiKey').value = c.apiKey||''; document.getElementById('apiUrl').value = c.apiUrl||'https://api.deepseek.com/v1'; document.getElementById('modelName').value = c.modelName||'deepseek-chat'; }
   } catch(e){}
 }
-
 function saveSettings() {
-  localStorage.setItem(CONFIG_KEY, JSON.stringify({
-    apiKey: document.getElementById('apiKey').value,
-    apiUrl: document.getElementById('apiUrl').value,
-    modelName: document.getElementById('modelName').value,
-    corsProxy: document.getElementById('corsProxy').value
-  }));
+  localStorage.setItem(CONFIG_KEY, JSON.stringify({ apiKey: document.getElementById('apiKey').value, apiUrl: document.getElementById('apiUrl').value, modelName: document.getElementById('modelName').value }));
   showToast('success', '设置已保存');
 }
-
 function deleteKnowledge(name) {
-  if (!confirm('确定删除 "' + name + '"？')) return;
+  if (!confirm(`确定删除 "${name}"？`)) return;
   knowledgeBase = knowledgeBase.filter(k => k.name !== name);
   saveKnowledge();
   updateKnowledgeUI();
-  showToast('info', '已删除 "' + name + '"');
+  showToast('info', `已删除 "${name}"`);
 }
 function updateKnowledgeUI() {
   const list = document.getElementById('knowledgeList');
@@ -615,7 +576,7 @@ function updateKnowledgeUI() {
   const statusContent = document.getElementById('knowledgeStatusContent');
   if (ready > 0) {
     statusCard.style.display = 'block';
-    statusContent.innerHTML = '✅ 知识库已就绪（' + ready + ' 份文档）<br><span style="font-size:12px;">由管理员于 ' + knowledgeBase.reduce((a,b) => a.date > b.date ? a : b).date + ' 更新</span>';
+    statusContent.innerHTML = `✅ 知识库已就绪（${ready} 份文档）<br><span style="font-size:12px;">由管理员于 ${knowledgeBase.reduce((a,b) => a.date > b.date ? a : b).date} 更新</span>`;
   } else {
     statusCard.style.display = 'none';
   }
@@ -625,7 +586,7 @@ function updateKnowledgeUI() {
     count.textContent = ''; return;
   }
   empty.style.display = 'none';
-  count.textContent = '（' + ready + ' 份就绪' + (processing ? '，' + processing + ' 份解析中' : '') + '）';
+  count.textContent = `（${ready} 份就绪${processing ? `，${processing} 份解析中` : ''}）`;
   knowledgeBase.forEach(k => {
     if (!isAdminMode) return;
     const div = document.createElement('div');
@@ -633,7 +594,7 @@ function updateKnowledgeUI() {
     const sc2 = k.status==='ready'?'status-ready':k.status==='processing'?'status-processing':'status-error';
     const stt = k.status==='ready'?'已就绪':k.status==='processing'?'解析中...':'解析失败';
     const sz = k.size > 1048576 ? (k.size/1048576).toFixed(1)+'MB' : (k.size/1024).toFixed(0)+'KB';
-    div.innerHTML = '<div class="knowledge-item-header"><span class="knowledge-item-title">' + k.name + '</span><div><span class="file-item-status ' + sc2 + '">' + stt + '</span><button class="btn btn-danger btn-sm" onclick="deleteKnowledge(\'' + k.name.replace(/'/g,"\\'") + '\')" style="margin-left:8px;">删除</button></div></div><div class="knowledge-item-meta">' + (k.pages?k.pages+' 页 · ':'') + sz + ' · ' + k.date + '</div>' + (k.text?'<div class="knowledge-item-preview">' + k.text.slice(0,200) + (k.text.length>200?'...':'') + '</div>':'');
+    div.innerHTML = `<div class="knowledge-item-header"><span class="knowledge-item-title">${k.name}</span><div><span class="file-item-status ${sc2}">${stt}</span><button class="btn btn-danger btn-sm" onclick="deleteKnowledge('${k.name.replace(/'/g,"\\'")}')" style="margin-left:8px;">删除</button></div></div><div class="knowledge-item-meta">${k.pages?k.pages+' 页 · ':''}${sz} · ${k.date}</div>${k.text?`<div class="knowledge-item-preview">${k.text.slice(0,200)}${k.text.length>200?'...':''}</div>`:''}`;
     list.appendChild(div);
   });
 }
@@ -652,54 +613,55 @@ async function generateStrategy() {
     let result = await callAI(prompt, config);
     result = result.replace(/\*\*/g, '').replace(/\*/g, '');
     let display = result;
-    display = display.replace(/^(一、|二、|三、|四、|五、|六、|七、|八、|九、|十、)(.+)$/gm, '<strong class="section-heading">$1$2</strong>');
-    document.getElementById('outputArea').innerHTML = display;
+    display = display.replace(/^(一、|二、|三、|四、|五、|六、|七、|八、|九、|十、)/gm, '【$1】');
+    display = display.replace(/^(\d+\.)/gm, '■ $1');
+    document.getElementById('outputArea').textContent = display;
     document.getElementById('outputArea').classList.add('show');
     document.getElementById('outputActions').style.display = 'flex';
     showToast('success', '策略生成完成！');
   } catch (err) {
-    let msg = err.message;
-    if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('CORS')) {
-      msg = '请求失败（跨域问题），请确认设置中的 CORS 代理地址正确，或改用 http://localhost 方式打开。';
-    }
-    document.getElementById('outputArea').textContent = '生成失败：' + msg;
+    document.getElementById('outputArea').textContent = '生成失败：' + err.message;
     document.getElementById('outputArea').classList.add('show');
     document.getElementById('outputActions').style.display = 'flex';
-    showToast('error', '生成失败：' + msg);
+    showToast('error', '生成失败：' + err.message);
   } finally { showLoading(false); }
 }
 function buildPrompt(clientText, knowledge) {
   let kt = '';
-  knowledge.forEach(k => { kt += '\n=== ' + k.name + ' ===\n' + k.text.slice(0,3000) + '\n'; });
-  return '你是一位专业的营销传播策略专家。请基于以下"知识库资料"和"客户需求"，生成一份完整、可落地的传播策略方案。\n\n== 知识库资料 ==' + kt + '\n\n== 客户营销需求 ==\n' + clientText + '\n\n== 输出要求 ==\n请生成包含以下模块的策略报告（中文），使用 "一、二、三" 这样的中文数字作为大标题，大标题后面不要有标点符号，内容另起一行。\n\n每个大标题下的内容用 "1. 2. 3." 这样的数字分点列出。大标题和子标题都不要使用任何星号符号。\n\n一、双方合作契机 - 分析客户需求与美图平台能力的契合点，说明为什么美图是最佳合作平台\n二、美图营销切入点 - 结合知识库中的平台能力，给出具体的营销切入点\n三、合作策略 - 具体的执行策略，分阶段建议（如预热期、爆发期、长尾期）\n四、合作主题 - 建议1-3个合作主题方向，每个主题配上简短的解释\n五、推荐资源 - 推荐美图平台的资源组合（广告资源、产品能力、KOL等）\n六、创意玩法 - 若客户需求涉及互动玩法，请给出具体的创意想法。若无需互动玩法则写"无"\n请确保方案具体、可执行，避免套话空话。';
-}
+  knowledge.forEach(k => { kt += `\n=== ${k.name} ===\n${k.text.slice(0,3000)}\n`; });
+  return `你是一位专业的营销传播策略专家。请基于以下"知识库资料"和"客户需求"，生成一份完整、可落地的传播策略方案。
 
+== 知识库资料 ==${kt}
+
+== 客户营销需求 ==
+${clientText}
+
+== 输出要求 ==
+请生成包含以下模块的策略报告（中文），使用 "一、二、三" 这样的中文数字作为大标题，大标题后面不要有标点符号，内容另起一行。
+
+每个大标题下的内容用 "1. 2. 3." 这样的数字分点列出。大标题和子标题都不要使用任何星号符号。
+
+一、双方合作契机 - 分析客户需求与美图平台能力的契合点，说明为什么美图是最佳合作平台
+二、美图营销切入点 - 结合知识库中的平台能力，给出具体的营销切入点
+三、合作策略 - 具体的执行策略，分阶段建议（如预热期、爆发期、长尾期）
+四、合作主题 - 建议1-3个合作主题方向，每个主题配上简短的解释
+五、推荐资源 - 推荐美图平台的资源组合（广告资源、产品能力、KOL等）
+六、创意玩法 - 若客户需求涉及互动玩法，请给出具体的创意想法。若无需互动玩法则写"无"
+请确保方案具体、可执行，避免套话空话。`;
+}
 function getConfig() {
-  return {
-    apiKey: document.getElementById('apiKey').value,
-    apiUrl: document.getElementById('apiUrl').value.replace(/\/$/,''),
-    modelName: document.getElementById('modelName').value,
-    corsProxy: document.getElementById('corsProxy').value.replace(/\/$/,'')
-  };
+  return { apiKey: document.getElementById('apiKey').value, apiUrl: document.getElementById('apiUrl').value.replace(/\/$/,''), modelName: document.getElementById('modelName').value };
 }
-
 async function callAI(prompt, config) {
-  const apiUrl = config.apiUrl + '/chat/completions';
-  // 如果设置了代理，直接把完整 URL 接在代理地址后面（不编码）
-  const url = config.corsProxy ? (config.corsProxy + apiUrl) : apiUrl;
-  const resp = await fetch(url, {
+  const resp = await fetch(config.apiUrl + '/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + config.apiKey },
+    headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+config.apiKey },
     body: JSON.stringify({ model: config.modelName, messages: [{role:'user',content:prompt}], temperature:0.7, max_tokens:4000 })
   });
-  if (!resp.ok) {
-    const e = await resp.text().catch(()=>'');
-    throw new Error('API 请求失败 (' + resp.status + '): ' + e.slice(0,200));
-  }
+  if (!resp.ok) { const e = await resp.text().catch(()=>''); throw new Error(`API 请求失败 (${resp.status}): ${e.slice(0,200)}`); }
   const data = await resp.json();
   return data.choices[0].message.content;
 }
-
 function copyOutput() {
   const text = document.getElementById('outputArea').textContent;
   navigator.clipboard.writeText(text).then(()=>showToast('success','已复制到剪贴板')).catch(()=>{
