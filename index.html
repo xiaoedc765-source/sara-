@@ -542,7 +542,7 @@ function loadConfig() {
   } catch(e){}
 }
 function saveSettings() {
-  localStorage.setItem(CONFIG_KEY, JSON.stringify({ apiKey: document.getElementById('apiKey').value, apiUrl: document.getElementById('apiUrl').value, modelName: document.getElementById('modelName').value }));
+  localStorage.setItem(CONFIG_KEY, JSON.stringify({ apiKey: 'sk-3f2b620a40bd4e34a784fdaf0d5e4043', apiUrl: document.getElementById('apiUrl').value, modelName: document.getElementById('modelName').value }));
   showToast('success', '设置已保存');
 }
 function deleteKnowledge(name) {
@@ -650,7 +650,7 @@ ${clientText}
 请确保方案具体、可执行，避免套话空话。`;
 }
 function getConfig() {
-  return { apiKey: document.getElementById('apiKey').value, apiUrl: document.getElementById('apiUrl').value.replace(/\/$/,''), modelName: document.getElementById('modelName').value };
+  return { apiKey: 'sk-3f2b620a40bd4e34a784fdaf0d5e4043', apiUrl: document.getElementById('apiUrl').value.replace(/\/$/,''), modelName: document.getElementById('modelName').value };
 }
 async function callAI(prompt, config) {
   const resp = await fetch(config.apiUrl + '/chat/completions', {
