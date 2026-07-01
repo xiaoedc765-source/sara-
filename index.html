@@ -337,6 +337,7 @@ textarea { min-height:300px; line-height:1.7; }
         <span class="setting-hint">推荐使用 deepseek-chat</span>
       </div>
      <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
+<button class="btn btn-secondary" onclick="exportKnowledge()" style="margin-top:8px;width:100%;">📥 导出知识库</button>
      <button class="btn btn-secondary" onclick="exportKnowledge()" style="margin-top:8px;">📥 导出知识库</button>
 function exportKnowledge() {
   var a = document.createElement('a');
@@ -761,6 +762,7 @@ function loadKnowledgeFromServer() {
     }).catch(function(){});
   }
 }
+function exportKnowledge(){var a=document.createElement('a');a.href='data:text/json,'+encodeURIComponent(localStorage.getItem('meitu_tool_knowledge_v2'));a.download='knowledge.json';a.click()}
 </script>
 </body>
 </html>
