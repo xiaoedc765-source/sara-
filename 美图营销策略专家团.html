@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美图营销策略专家</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
+<style>
+:root {
+  --primary: #1A1A1A;
+  --primary-dark: #000000;
+  --primary-light: #333333;
+  --primary-bg: #1A1A1A;
+  --text: #1A1A2E;
+  --text-secondary: #666680;
+  --border: #E0E0E0;
+  --bg: #FAFAFE;
+  --card: #FFFFFF;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.25s ease;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+.header {
+  background: #1A1A1A;
+  padding: 24px 32px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 2px;
+}
+.header-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 4px;
+}
+.container { max-width:1100px; margin:0 auto; padding:24px 20px 60px; }
+.tabs {
+  display:flex; gap:4px;
+  background:var(--card); border-radius:var(--radius); padding:4px;
+  box-shadow:var(--shadow); margin-bottom:24px;
+}
+.tab-btn {
+  flex:1; padding:10px 16px; border:none;
+  background:transparent; border-radius:var(--radius-sm);
+  font-size:14px; font-weight:500;
+  color:var(--text-secondary); cursor:pointer;
+  transition:var(--transition);
+}
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active {
+  background: #1A1A1A;
+  color: white;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+.card {
+  background:var(--card); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:24px; margin-bottom:20px;
+}
+.card-title {
+  font-size:16px; font-weight:600; margin-bottom:16px;
+  display:flex; align-items:center; gap:8px;
+}
+.card-title .icon { font-size:20px; }
+textarea, input[type="text"], input[type="password"] {
+  width:100%; padding:12px 16px;
+  border:1.5px solid var(--border); border-radius:var(--radius-sm);
+  font-size:14px; font-family:inherit; resize:vertical;
+  transition:var(--transition); background:var(--bg);
+  color:var(--text); outline:none;
+}
+textarea:focus, input:focus {
+  border-color:#1A1A1A; box-shadow:0 0 0 3px rgba(26,26,26,0.08);
+}
+textarea { min-height:300px; line-height:1.7; }
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:10px 20px; border:none;
+  border-radius:var(--radius-sm); font-size:14px; font-weight:500;
+  cursor:pointer; transition:var(--transition); font-family:inherit;
+}
+.btn-primary { background: #E85D8A; color: white; }
+.btn-primary:hover {
+  background: #D44A78;
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(232,93,138,0.3);
+}
+.btn-primary:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.btn-secondary { background:#F0E6EA; color:#D44A78; }
+.btn-secondary:hover { background:#FFD0DE; }
+.btn-outline { background:transparent; border:1.5px solid var(--border); color:var(--text-secondary); }
+.btn-outline:hover { border-color:#E85D8A; color:#E85D8A; }
+.btn-danger { background:#FFF0F0; color:#E85D5D; }
+.btn-danger:hover { background:#FFE0E0; }
+.btn-sm { padding:6px 12px; font-size:12px; }
+.btn-lg { padding:14px 28px; font-size:16px; }
+.drop-zone {
+  border:2px dashed var(--border); border-radius:var(--radius);
+  padding:40px 20px; text-align:center; cursor:pointer;
+  transition:var(--transition); background:#F8F8FC; position:relative;
+}
+.drop-zone:hover, .drop-zone.dragover { border-color:#1A1A1A; background:#F0F0F5; }
+.drop-zone-icon { font-size:40px; margin-bottom:12px; opacity:0.4; }
+.drop-zone-text { font-size:14px; color:var(--text-secondary); }
+.drop-zone-hint { font-size:12px; color:var(--text-secondary); margin-top:8px; opacity:0.7; }
+.drop-zone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+.knowledge-list { display:flex; flex-direction:column; gap:10px; }
+.knowledge-item {
+  padding:14px; background:var(--bg);
+  border-radius:var(--radius-sm); border:1px solid var(--border);
+  cursor:pointer; transition:var(--transition);
+}
+.knowledge-item:hover { border-color:#1A1A1A; }
+.knowledge-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.knowledge-item-title { font-size:14px; font-weight:600; }
+.knowledge-item-meta { font-size:12px; color:var(--text-secondary); }
+.knowledge-item-preview {
+  font-size:13px; color:var(--text-secondary); line-height:1.6;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+.knowledge-empty { text-align:center; padding:40px 20px; color:var(--text-secondary); }
+.knowledge-empty-icon { font-size:48px; opacity:0.2; margin-bottom:12px; }
+.input-section { display:flex; flex-direction:column; gap:16px; }
+.input-label { font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; display:block; }
+.output-area {
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:var(--radius-sm); padding:20px;
+  min-height:200px; white-space:pre-wrap;
+  line-height:1.8; font-size:14px; display:none;
+}
+.output-area.show { display:block; }
+.output-area .section-heading {
+  font-size: 20px;
+  font-weight: 700;
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  color: #1A1A1A;
+}
+.output-area .section-heading:first-child {
+  margin-top: 0;
+}
+.output-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.loading-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(255,255,255,0.9); z-index:999;
+  align-items:center; justify-content:center; flex-direction:column; gap:16px;
+}
+.loading-overlay.show { display:flex; }
+.loading-spinner {
+  width:40px; height:40px;
+  border:3px solid #F0E6EA; border-top-color:#E85D8A;
+  border-radius:50%; animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { font-size:15px; color:var(--text-secondary); }
+.loading-subtext { font-size:12px; color:var(--text-secondary); opacity:0.7; }
+.status-bar {
+  display:flex; align-items:center; gap:8px;
+  padding:10px 16px; background:var(--card);
+  border:1px solid var(--border); border-radius:var(--radius-sm);
+  font-size:13px; color:var(--text-secondary); margin-top:16px;
+}
+.status-dot { width:8px; height:8px; border-radius:50%; }
+.status-dot.green { background:#4CAF50; }
+.status-dot.yellow { background:#FF9800; }
+.status-dot.gray { background:#BDBDBD; }
+.settings-section { display:flex; flex-direction:column; gap:16px; }
+.setting-row { display:flex; flex-direction:column; gap:6px; }
+.setting-label { font-size:13px; font-weight:500; color:var(--text-secondary); }
+.setting-hint { font-size:12px; color:var(--text-secondary); opacity:0.7; }
+.toast {
+  position:fixed; top:20px; right:20px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius-sm); padding:14px 20px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  z-index:9999; display:none; max-width:400px;
+  font-size:14px; line-height:1.5; animation:slideIn 0.3s ease;
+}
+@keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+.toast.show { display:block; }
+.toast-success { border-left:4px solid #4CAF50; }
+.toast-error { border-left:4px solid #E85D5D; }
+.toast-info { border-left:4px solid #1A1A1A; }
+.admin-link {
+  font-size:12px; color:var(--text-secondary); opacity:0.5;
+  text-align:center; margin-top:12px; cursor:pointer;
+  transition:var(--transition);
+}
+.admin-link:hover { opacity:1; color:#1A1A1A; }
+.admin-tabs { display:none; }
+.admin-tabs.show { display:flex; }
+.modal-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.4); z-index:9998;
+  align-items:center; justify-content:center;
+}
+.modal-overlay.show { display:flex; }
+.modal-box {
+  background:var(--card); border-radius:var(--radius);
+  padding:32px; max-width:400px; width:90%;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15);
+}
+.modal-title { font-size:18px; font-weight:600; margin-bottom:16px; text-align:center; }
+.modal-body { display:flex; flex-direction:column; gap:12px; }
+.pass-strength {
+  height:4px; border-radius:2px; margin-top:4px;
+  background:#F0E6EA; transition:var(--transition);
+}
+.pass-strength.weak { background:#E85D5D; width:33%; }
+.pass-strength.medium { background:#FF9800; width:66%; }
+.pass-strength.strong { background:#4CAF50; width:100%; }
+@media (max-width:768px) {
+  .header { padding:16px; }
+  .header-title { font-size:22px; }
+  .container { padding:16px; }
+  .card { padding:16px; }
+  .tabs { flex-wrap:wrap; }
+  .tab-btn { font-size:12px; padding:8px 12px; }
+  .drop-zone { padding:24px 16px; }
+  .knowledge-item-preview { -webkit-line-clamp:2; }
+  .modal-box { margin:16px; }
+}
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:#E0E0E0; border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:#CCC; }
+</style>
+</head>
+<body>
+<div class="modal-overlay" id="passwordModal">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle">管理员验证</div>
+    <div class="modal-body">
+      <input type="password" id="passwordInput" placeholder="请输入管理员密码" autocomplete="off">
+      <div id="passSetupHint" style="font-size:12px;color:var(--text-secondary);display:none;">首次使用请设置管理员密码，用于管理知识库和API配置</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="handlePassword()" id="passwordConfirmBtn">确认</button>
+        <button class="btn btn-outline" onclick="closePasswordModal()">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text" id="loadingText">正在分析...</div>
+  <div class="loading-subtext" id="loadingSubtext">正在读取知识库，请稍候</div>
+</div>
+<div class="toast" id="toast"></div>
+<header class="header">
+  <div class="header-title">美图营销策略专家</div>
+  <div class="header-subtitle" id="headerMode">智能传播策略助手</div>
+</header>
+<div class="container">
+<div class="tabs" id="mainTabs">
+  <button class="tab-btn active" data-tab="input">📑 输入需求</button>
+</div>
+<div class="tabs admin-tabs" id="adminTabs">
+  <button class="tab-btn" data-tab="knowledge">📎 知识库</button>
+  <button class="tab-btn" data-tab="settings">⚙️ 设置</button>
+</div>
+<div class="tab-content active" id="tab-input">
+  <div class="card">
+    <div class="input-section">
+      <div>
+        <label class="input-label">客户需求描述</label>
+        <textarea id="clientInput" placeholder="请粘贴客户的营销需求，例如：
+
+品牌：XX美妆
+需求：618大促推广
+目标人群：18-30岁女性
+预算：50万
+核心卖点：新品美白精华
+希望合作形式：开屏广告+互动玩法"></textarea>
+      </div>
+    </div>
+  </div>
+  <div id="knowledgeStatusCard" class="card" style="display:none;">
+    <div class="card-title"><span class="icon">📎</span>知识库状态</div>
+    <div id="knowledgeStatusContent" style="font-size:14px;color:var(--text-secondary);line-height:1.6;"></div>
+  </div>
+  <button class="btn btn-primary btn-lg" id="generateBtn" style="width:100%;justify-content:center;" onclick="generateStrategy()">✨ 生成传播策略</button>
+  <div class="card" style="margin-top:20px;">
+    <div class="card-title"><span class="icon">📫</span>生成的策略</div>
+    <div class="output-area" id="outputArea"></div>
+    <div class="output-actions" id="outputActions" style="display:none;">
+      <button class="btn btn-primary btn-sm" onclick="copyOutput()">📋 复制文本</button>
+      <button class="btn btn-secondary btn-sm" onclick="downloadPPT()">📊 下载PPT</button>
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('outputArea').classList.remove('show');this.parentElement.style.display='none'">✕ 关闭</button>
+    </div>
+  </div>
+</div>
+<div class="tab-content" id="tab-knowledge">
+  <div class="card">
+    <div class="card-title"><span class="icon">📄</span>上传知识库文档</div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;line-height:1.6;">上传美图平台介绍、营销产品资料、过往合作案例等 PDF 文档。浏览器将自动解析文字内容，数据保存在本地。</p>
+    <div class="drop-zone" id="pdfDropZone">
+      <div class="drop-zone-icon">📄</div>
+      <div class="drop-zone-text">点击或拖拽 PDF 文档上传</div>
+      <div class="drop-zone-hint">支持 PDF 格式，单个文件最大 50MB</div>
+      <input type="file" accept=".pdf" multiple id="pdfInput">
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">📖</span>知识库文档列表<span id="knowledgeCount" style="font-size:12px;color:var(--text-secondary);font-weight:400;margin-left:4px;"></span></div>
+    <div id="knowledgeList" class="knowledge-list">
+      <div class="knowledge-empty" id="knowledgeEmpty">
+        <div class="knowledge-empty-icon">📚</div>
+        <div style="font-size:14px;">暂无文档</div>
+        <div style="font-size:12px;margin-top:4px;">请上传美图平台介绍、营销产品、合作案例等 PDF 文档</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tab-content" id="tab-settings">
+  <div class="card">
+    <div class="card-title"><span class="icon">⚙️</span>API 配置</div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6;">工具需要调用 AI 接口来生成传播策略。请输入 DeepSeek API Key 和模型名称。</p>
+    <div class="settings-section">
+      <div class="setting-row">
+        <label class="setting-label">API Key</label>
+        <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off">
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">API 地址</label>
+        <input type="text" id="apiUrl" placeholder="https://api.deepseek.com/v1" value="https://api.deepseek.com/v1">
+        <span class="setting-hint">支持 OpenAI 格式的 API（如 DeepSeek 等）</span>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">模型名称</label>
+        <input type="text" id="modelName" placeholder="deepseek-chat" value="deepseek-chat">
+        <span class="setting-hint">推荐使用 deepseek-chat</span>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">CORS 代理地址</label>
+        <input type="text" id="corsProxy" placeholder="https://corsproxy.io/?" value="https://corsproxy.io/?">
+        <span class="setting-hint">留空则不使用代理。如遇跨域问题，保留默认地址即可</span>
+      </div>
+      <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">🔑</span>管理员密码</div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6;">设置或修改管理员密码。修改后将自动退出管理模式。</p>
+    <div class="settings-section">
+      <div class="setting-row">
+        <label class="setting-label">新密码</label>
+        <input type="password" id="newPassword" placeholder="设置管理员密码" autocomplete="off">
+        <div class="pass-strength" id="passStrength"></div>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">确认新密码</label>
+        <input type="password" id="confirmPassword" placeholder="再次输入新密码" autocomplete="off">
+      </div>
+      <button class="btn btn-primary" onclick="changePassword()">🔑 修改密码</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">ℹ️</span>关于工具</div>
+    <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+      <p><strong>版本：</strong>2.0</p>
+      <p><strong>用途：</strong>结合美图知识库和客户需求，自动生成传播策略方案</p>
+      <p><strong>数据安全：</strong>所有数据仅保存在你的浏览器本地，不会上传至任何服务器</p>
+      <p><strong>模式说明：</strong>管理员可上传知识库和配置API，销售员直接使用</p>
+    </div>
+  </div>
+</div>
+<div class="status-bar">
+  <span class="status-dot" id="statusDot"></span>
+  <span id="statusText">知识库文档数: <strong id="statusCount">0</strong> | 上次更新: <strong id="statusUpdate">-</strong></span>
+</div>
+<div class="admin-link" id="adminLink" onclick="openPasswordModal()">🔐 管理员入口</div>
+<div class="admin-link" id="exitAdminLink" style="display:none;" onclick="exitAdminMode()">🔓 退出管理模式</div>
+</div>
+<script>
+const STORAGE_KEY = 'meitu_tool_knowledge_v2';
+const CONFIG_KEY = 'meitu_tool_config_v2';
+const PWD_KEY = 'meitu_tool_password';
+const ADMIN_KEY = 'meitu_tool_admin_session';
+let knowledgeBase = [];
+let isAdminMode = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadKnowledge();
+  loadConfig();
+  updateKnowledgeUI();
+  initTabs();
+  initPDFUpload();
+  checkAdminSession();
+  initPasswordStrength();
+  document.getElementById('passwordInput').addEventListener('keydown', e => { if (e.key === 'Enter') handlePassword(); });
+  document.getElementById('newPassword').addEventListener('input', updatePasswordStrength);
+  checkCorsOrigin();
+});
+
+function checkCorsOrigin() {
+  if (window.location.protocol === 'file:') {
+    setTimeout(() => {
+      showToast('info', '检测到 file:// 模式，设置中已预填 CORS 代理地址，可直接使用');
+    }, 1500);
+  }
+}
+
+function initTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+}
+function showToast(type, msg) {
+  const t = document.getElementById('toast');
+  t.className = 'toast toast-' + type + ' show';
+  t.textContent = msg;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 5000);
+}
+function initPasswordStrength() {
+  updatePasswordStrength();
+  document.getElementById('confirmPassword').addEventListener('keydown', e => { if (e.key === 'Enter') changePassword(); });
+}
+function updatePasswordStrength() {
+  const pwd = document.getElementById('newPassword').value;
+  const bar = document.getElementById('passStrength');
+  bar.className = 'pass-strength';
+  if (pwd.length === 0) return;
+  if (pwd.length < 6) bar.classList.add('weak');
+  else if (pwd.length < 10) bar.classList.add('medium');
+  else bar.classList.add('strong');
+}
+function getPassword() { return localStorage.getItem(PWD_KEY) || ''; }
+function setPassword(pwd) { localStorage.setItem(PWD_KEY, pwd); }
+function hasPassword() { return getPassword().length > 0; }
+function openPasswordModal() {
+  const hasPwd = hasPassword();
+  document.getElementById('modalTitle').textContent = hasPwd ? '管理员验证' : '设置管理员密码';
+  document.getElementById('passwordConfirmBtn').textContent = hasPwd ? '验证' : '设置密码';
+  document.getElementById('passSetupHint').style.display = hasPwd ? 'none' : 'block';
+  document.getElementById('passwordInput').value = '';
+  document.getElementById('passwordModal').classList.add('show');
+  setTimeout(() => document.getElementById('passwordInput').focus(), 100);
+}
+function closePasswordModal() { document.getElementById('passwordModal').classList.remove('show'); }
+function handlePassword() {
+  const input = document.getElementById('passwordInput').value.trim();
+  if (!input) { showToast('error', '请输入密码'); return; }
+  if (hasPassword()) {
+    if (input === getPassword()) { enterAdminMode(); closePasswordModal(); }
+    else { showToast('error', '密码错误'); }
+  } else {
+    if (input.length < 4) { showToast('error', '密码至少4位'); return; }
+    setPassword(input);
+    showToast('success', '管理员密码设置成功');
+    enterAdminMode();
+    closePasswordModal();
+  }
+}
+function checkAdminSession() {
+  if (sessionStorage.getItem(ADMIN_KEY)) enterAdminMode();
+}
+function enterAdminMode() {
+  isAdminMode = true;
+  sessionStorage.setItem(ADMIN_KEY, '1');
+  document.getElementById('headerMode').textContent = '管理模式 · 智能传播策略助手';
+  document.getElementById('adminLink').style.display = 'none';
+  document.getElementById('exitAdminLink').style.display = 'block';
+  document.getElementById('adminTabs').classList.add('show');
+  loadConfig();
+}
+function exitAdminMode() {
+  isAdminMode = false;
+  sessionStorage.removeItem(ADMIN_KEY);
+  document.getElementById('headerMode').textContent = '智能传播策略助手';
+  document.getElementById('adminLink').style.display = 'block';
+  document.getElementById('exitAdminLink').style.display = 'none';
+  document.getElementById('adminTabs').classList.remove('show');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('.tab-btn[data-tab="input"]').classList.add('active');
+  document.getElementById('tab-input').classList.add('active');
+  showToast('info', '已退出管理模式');
+}
+function changePassword() {
+  const pwd = document.getElementById('newPassword').value;
+  const confirm = document.getElementById('confirmPassword').value;
+  if (!pwd || pwd.length < 4) { showToast('error', '密码至少4位'); return; }
+  if (pwd !== confirm) { showToast('error', '两次密码不一致'); return; }
+  setPassword(pwd);
+  document.getElementById('newPassword').value = '';
+  document.getElementById('confirmPassword').value = '';
+  updatePasswordStrength();
+  showToast('success', '密码修改成功');
+  exitAdminMode();
+}
+function initPDFUpload() {
+  const input = document.getElementById('pdfInput');
+  const zone = document.getElementById('pdfDropZone');
+  input.addEventListener('change', e => { if (e.target.files.length) handlePDFFiles(e.target.files); });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handlePDFFiles(e.dataTransfer.files);
+  });
+}
+async function handlePDFFiles(files) {
+  for (const file of files) {
+    if (!file.name.toLowerCase().endsWith('.pdf')) { showToast('error', '"' + file.name + '" 不是 PDF 文件'); continue; }
+    if (file.size > 50 * 1024 * 1024) { showToast('error', '"' + file.name + '" 超过 50MB 限制'); continue; }
+    if (knowledgeBase.some(k => k.name === file.name)) { showToast('info', '"' + file.name + '" 已存在，跳过'); continue; }
+    await processPDF(file);
+  }
+}
+async function processPDF(file) {
+  const entry = { name: file.name, status: 'processing', size: file.size, text: '', date: new Date().toLocaleString('zh-CN'), pages: 0 };
+  knowledgeBase.push(entry);
+  updateKnowledgeUI();
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    entry.pages = pdf.numPages;
+    let fullText = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      fullText += content.items.map(item => item.str).join(' ') + '\n';
+      if (i % 5 === 0) updateKnowledgeUI();
+    }
+    entry.text = fullText.trim();
+    entry.status = 'ready';
+    entry.date = new Date().toLocaleString('zh-CN');
+    saveKnowledge();
+    updateKnowledgeUI();
+    showToast('success', '"' + file.name + '" 解析完成（' + pdf.numPages + ' 页）');
+  } catch (err) {
+    entry.status = 'error';
+    updateKnowledgeUI();
+    showToast('error', '"' + file.name + '" 解析失败: ' + err.message);
+  }
+}
+function loadKnowledge() { try { const s = localStorage.getItem(STORAGE_KEY); if (s) knowledgeBase = JSON.parse(s); } catch(e){} }
+function saveKnowledge() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(knowledgeBase)); } catch(e){} }
+
+function loadConfig() {
+  try {
+    const s = localStorage.getItem(CONFIG_KEY);
+    if (s) {
+      const c = JSON.parse(s);
+      document.getElementById('apiKey').value = c.apiKey || '';
+      document.getElementById('apiUrl').value = c.apiUrl || 'https://api.deepseek.com/v1';
+      document.getElementById('modelName').value = c.modelName || 'deepseek-chat';
+      document.getElementById('corsProxy').value = c.corsProxy || 'https://corsproxy.io/?';
+    }
+  } catch(e){}
+}
+
+function saveSettings() {
+  localStorage.setItem(CONFIG_KEY, JSON.stringify({
+    apiKey: document.getElementById('apiKey').value,
+    apiUrl: document.getElementById('apiUrl').value,
+    modelName: document.getElementById('modelName').value,
+    corsProxy: document.getElementById('corsProxy').value
+  }));
+  showToast('success', '设置已保存');
+}
+
+function deleteKnowledge(name) {
+  if (!confirm('确定删除 "' + name + '"？')) return;
+  knowledgeBase = knowledgeBase.filter(k => k.name !== name);
+  saveKnowledge();
+  updateKnowledgeUI();
+  showToast('info', '已删除 "' + name + '"');
+}
+function updateKnowledgeUI() {
+  const list = document.getElementById('knowledgeList');
+  const empty = document.getElementById('knowledgeEmpty');
+  const count = document.getElementById('knowledgeCount');
+  const sc = document.getElementById('statusCount');
+  const su = document.getElementById('statusUpdate');
+  const sd = document.getElementById('statusDot');
+  const ready = knowledgeBase.filter(k => k.status === 'ready').length;
+  const processing = knowledgeBase.filter(k => k.status === 'processing').length;
+  const total = knowledgeBase.length;
+  if (total > 0) {
+    sd.className = 'status-dot green';
+    const latest = knowledgeBase.reduce((a,b) => a.date > b.date ? a : b);
+    su.textContent = latest.date;
+    sc.textContent = ready + ' 份就绪';
+  } else {
+    sd.className = 'status-dot gray';
+    su.textContent = '-';
+    sc.textContent = '0';
+  }
+  const statusCard = document.getElementById('knowledgeStatusCard');
+  const statusContent = document.getElementById('knowledgeStatusContent');
+  if (ready > 0) {
+    statusCard.style.display = 'block';
+    statusContent.innerHTML = '✅ 知识库已就绪（' + ready + ' 份文档）<br><span style="font-size:12px;">由管理员于 ' + knowledgeBase.reduce((a,b) => a.date > b.date ? a : b).date + ' 更新</span>';
+  } else {
+    statusCard.style.display = 'none';
+  }
+  document.querySelectorAll('.knowledge-item').forEach(el => el.remove());
+  if (total === 0) {
+    empty.style.display = 'block'; list.appendChild(empty);
+    count.textContent = ''; return;
+  }
+  empty.style.display = 'none';
+  count.textContent = '（' + ready + ' 份就绪' + (processing ? '，' + processing + ' 份解析中' : '') + '）';
+  knowledgeBase.forEach(k => {
+    if (!isAdminMode) return;
+    const div = document.createElement('div');
+    div.className = 'knowledge-item';
+    const sc2 = k.status==='ready'?'status-ready':k.status==='processing'?'status-processing':'status-error';
+    const stt = k.status==='ready'?'已就绪':k.status==='processing'?'解析中...':'解析失败';
+    const sz = k.size > 1048576 ? (k.size/1048576).toFixed(1)+'MB' : (k.size/1024).toFixed(0)+'KB';
+    div.innerHTML = '<div class="knowledge-item-header"><span class="knowledge-item-title">' + k.name + '</span><div><span class="file-item-status ' + sc2 + '">' + stt + '</span><button class="btn btn-danger btn-sm" onclick="deleteKnowledge(\'' + k.name.replace(/'/g,"\\'") + '\')" style="margin-left:8px;">删除</button></div></div><div class="knowledge-item-meta">' + (k.pages?k.pages+' 页 · ':'') + sz + ' · ' + k.date + '</div>' + (k.text?'<div class="knowledge-item-preview">' + k.text.slice(0,200) + (k.text.length>200?'...':'') + '</div>':'');
+    list.appendChild(div);
+  });
+}
+async function generateStrategy() {
+  const clientText = document.getElementById('clientInput').value.trim();
+  if (!clientText) { showToast('error', '请先输入客户营销需求'); return; }
+  const config = getConfig();
+  if (!config.apiKey) { showToast('error', '系统尚未配置，请联系管理员设置 API Key'); return; }
+  const readyKnowledge = knowledgeBase.filter(k => k.status === 'ready');
+  if (readyKnowledge.length === 0) { showToast('error', '知识库尚未加载，请联系管理员上传文档'); return; }
+  showLoading(true);
+  document.getElementById('outputArea').classList.remove('show');
+  document.getElementById('outputActions').style.display = 'none';
+  try {
+    const prompt = buildPrompt(clientText, readyKnowledge);
+    let result = await callAI(prompt, config);
+    result = result.replace(/\*\*/g, '').replace(/\*/g, '');
+    let display = result;
+    display = display.replace(/^(一、|二、|三、|四、|五、|六、|七、|八、|九、|十、)(.+)$/gm, '<strong class="section-heading">$1$2</strong>');
+    document.getElementById('outputArea').innerHTML = display;
+    document.getElementById('outputArea').classList.add('show');
+    document.getElementById('outputActions').style.display = 'flex';
+    showToast('success', '策略生成完成！');
+  } catch (err) {
+    let msg = err.message;
+    if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('CORS')) {
+      msg = '请求失败（跨域问题），请确认设置中的 CORS 代理地址正确，或改用 http://localhost 方式打开。';
+    }
+    document.getElementById('outputArea').textContent = '生成失败：' + msg;
+    document.getElementById('outputArea').classList.add('show');
+    document.getElementById('outputActions').style.display = 'flex';
+    showToast('error', '生成失败：' + msg);
+  } finally { showLoading(false); }
+}
+function buildPrompt(clientText, knowledge) {
+  let kt = '';
+  knowledge.forEach(k => { kt += '\n=== ' + k.name + ' ===\n' + k.text.slice(0,3000) + '\n'; });
+  return '你是一位专业的营销传播策略专家。请基于以下"知识库资料"和"客户需求"，生成一份完整、可落地的传播策略方案。\n\n== 知识库资料 ==' + kt + '\n\n== 客户营销需求 ==\n' + clientText + '\n\n== 输出要求 ==\n请生成包含以下模块的策略报告（中文），使用 "一、二、三" 这样的中文数字作为大标题，大标题后面不要有标点符号，内容另起一行。\n\n每个大标题下的内容用 "1. 2. 3." 这样的数字分点列出。大标题和子标题都不要使用任何星号符号。\n\n一、双方合作契机 - 分析客户需求与美图平台能力的契合点，说明为什么美图是最佳合作平台\n二、美图营销切入点 - 结合知识库中的平台能力，给出具体的营销切入点\n三、合作策略 - 具体的执行策略，分阶段建议（如预热期、爆发期、长尾期）\n四、合作主题 - 建议1-3个合作主题方向，每个主题配上简短的解释\n五、推荐资源 - 推荐美图平台的资源组合（广告资源、产品能力、KOL等）\n六、创意玩法 - 若客户需求涉及互动玩法，请给出具体的创意想法。若无需互动玩法则写"无"\n请确保方案具体、可执行，避免套话空话。';
+}
+
+function getConfig() {
+  return {
+    apiKey: document.getElementById('apiKey').value,
+    apiUrl: document.getElementById('apiUrl').value.replace(/\/$/,''),
+    modelName: document.getElementById('modelName').value,
+    corsProxy: document.getElementById('corsProxy').value.replace(/\/$/,'')
+  };
+}
+
+async function callAI(prompt, config) {
+  const apiUrl = config.apiUrl + '/chat/completions';
+  // 如果设置了代理，直接把完整 URL 接在代理地址后面（不编码）
+  const url = config.corsProxy ? (config.corsProxy + apiUrl) : apiUrl;
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + config.apiKey },
+    body: JSON.stringify({ model: config.modelName, messages: [{role:'user',content:prompt}], temperature:0.7, max_tokens:4000 })
+  });
+  if (!resp.ok) {
+    const e = await resp.text().catch(()=>'');
+    throw new Error('API 请求失败 (' + resp.status + '): ' + e.slice(0,200));
+  }
+  const data = await resp.json();
+  return data.choices[0].message.content;
+}
+
+function copyOutput() {
+  const text = document.getElementById('outputArea').textContent;
+  navigator.clipboard.writeText(text).then(()=>showToast('success','已复制到剪贴板')).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); ta.remove();
+    showToast('success','已复制到剪贴板');
+  });
+}
+function showLoading(show) { document.getElementById('loadingOverlay').classList.toggle('show', show); }
+document.addEventListener('keydown', e => { if ((e.metaKey||e.ctrlKey)&&e.key==='Enter') generateStrategy(); });
+
+function downloadPPT() {
+  const text = document.getElementById('outputArea').textContent;
+  if (!text) { showToast('error', '没有可导出的内容'); return; }
+  try {
+    const pptx = new PptxGenJS();
+    pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
+    pptx.layout = 'WIDE';
+    const sections = parseSections(text);
+    const C = { pink: 'E85D8A', dark: '1A1A1A', white: 'FFFFFF', lightPink: 'FFF5F8' };
+    const s1 = pptx.addSlide();
+    s1.background = { fill: C.dark };
+    s1.addText('美图营销策略方案', { x: 0.5, y: 1.8, w: 12.33, h: 1.5, fontSize: 44, color: C.white, bold: true, align: 'center', fontFace: 'Microsoft YaHei' });
+    s1.addText('传播策略方案', { x: 0.5, y: 3.5, w: 12.33, h: 1, fontSize: 24, color: '#999', align: 'center', fontFace: 'Microsoft YaHei' });
+    s1.addText('美图 · 智能传播策略助手', { x: 0.5, y: 6, w: 12.33, h: 0.8, fontSize: 16, color: '#666', align: 'center', fontFace: 'Microsoft YaHei' });
+    const sectionNames = ['双方合作契机', '美图营销切入点', '合作策略', '合作主题', '推荐资源', '创意玩法'];
+    const icons = ['🤝', '🎯', '📋', '💡', '📦', '✨'];
+    sectionNames.forEach((sectionName, idx) => {
+      const content = sections[sectionName];
+      if (!content) return;
+      const slide = pptx.addSlide();
+      slide.background = { fill: C.white };
+      slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 13.33, h: 1.4, fill: { color: C.dark } });
+      slide.addText(icons[idx] + '  ' + sectionName, { x: 0.5, y: 0.15, w: 12.33, h: 1.1, fontSize: 28, color: C.white, bold: true, fontFace: 'Microsoft YaHei' });
+      slide.addText(content, { x: 0.6, y: 1.7, w: 12.13, h: 5.5, fontSize: 15, color: C.dark, valign: 'top', fontFace: 'Microsoft YaHei', lineSpacing: 24 });
+    });
+    pptx.writeFile({ fileName: '美图营销策略方案.pptx' });
+    showToast('success', 'PPT 下载成功！');
+  } catch (err) {
+    showToast('error', 'PPT 生成失败: ' + err.message);
+  }
+}
+function parseSections(text) {
+  const sections = {};
+  let currentSection = '';
+  let currentContent = [];
+  const headers = ['双方合作契机', '美图营销切入点', '合作策略', '合作主题', '推荐资源', '创意玩法'];
+  const lines = text.split('\n');
+  for (const line of lines) {
+    let matched = false;
+    for (const h of headers) {
+      if (line.includes(h)) {
+        if (currentSection && currentContent.length) sections[currentSection] = currentContent.join('\n').trim();
+        currentSection = h;
+        currentContent = [];
+        matched = true;
+        break;
+      }
+    }
+    if (!matched && currentSection) currentContent.push(line);
+  }
+  if (currentSection && currentContent.length) sections[currentSection] = currentContent.join('\n').trim();
+  return sections;
+}
+</script>
+</body>
+</html>
